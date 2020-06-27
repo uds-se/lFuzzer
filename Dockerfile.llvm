@@ -1,0 +1,20 @@
+FROM ubuntu:18.04
+
+# setup clang
+WORKDIR /home/
+RUN apt update
+
+RUN apt install -y build-essential
+RUN apt install -y gcc
+RUN apt install -y ninja-build
+RUN apt install -y cmake
+RUN apt install -y python3
+
+
+RUN mkdir -p /home/scripts
+COPY scripts/docker_install_llvm_clang.sh /home/scripts/docker_install_llvm_clang.sh
+COPY scripts/toolchains /home/toolchains
+
+WORKDIR /home/scripts/
+
+RUN ./docker_install_llvm_clang.sh

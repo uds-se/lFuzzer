@@ -1,0 +1,64 @@
+FROM lfuzzer_llvm:401
+
+# get necessary dependencies
+RUN apt-get update
+RUN apt install -y git
+RUN apt install -y curl
+RUN apt install -y wget
+RUN apt install -y zip
+RUN apt install -y nano
+RUN apt install -y htop
+RUN apt install -y python3-distutils
+RUN apt install -y libzmq3-dev
+RUN apt install -y openjdk-11-jdk
+RUN apt install -y pkg-config
+RUN apt install -y libz-dev
+RUN apt install -y libreadline-dev
+RUN apt install -y time
+
+WORKDIR /home/
+RUN mkdir -p downloads
+WORKDIR /home/downloads
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+RUN python3 get-pip.py
+
+RUN pip3 install meson
+RUN pip3 install z3-solver
+RUN pip3 install gcovr
+RUN pip3 install matplotlib
+RUN pip3 install pandas
+
+RUN apt install -y locales
+RUN locale-gen en_US.UTF-8
+ENV LC_ALL "en_US.UTF-8"
+ENV LANG "en_US.UTF-8"
+
+RUN wget https://github.com/json-c/json-c/archive/json-c-0.13.1-20180305.zip
+RUN unzip json-c-0.13.1-20180305.zip
+WORKDIR /home/downloads/json-c-json-c-0.13.1-20180305
+RUN mkdir -p json-c-build
+WORKDIR /home/downloads/json-c-json-c-0.13.1-20180305/json-c-build
+RUN cmake ..
+RUN make
+RUN make install
+ENV LD_LIBRARY_PATH /usr/local/lib
+
+# install afl
+RUN mkdir -p /home/programs/
+WORKDIR /home/programs/
+RUN wget https://lcamtuf.coredump.cx/afl/releases/afl-2.52b.tgz
+RUN tar zxvf afl-2.52b.tgz
+RUN rm afl-2.52b.tgz
+WORKDIR /home/programs/afl-2.52b/
+RUN make
+
+# compile and install lFuzzer
+ENV PATH "/home/toolchains/llvm+clang-401/bin/:$PATH"
+
+# copy evaluation data and code before starting
+COPY lfuzzer /home/lfuzzer/
+
+WORKDIR /home/lfuzzer/
+RUN python3 ./scripts/distribute_dependencies_and_subjects.py
+RUN meson build/debug --prefix="$(pwd)/install"
+RUN ninja -C build/debug install
