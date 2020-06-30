@@ -4,7 +4,6 @@ FROM lfuzzer_llvm:401
 RUN apt-get update
 RUN apt install -y git
 RUN apt install -y curl
-RUN apt install -y wget
 RUN apt install -y zip
 RUN apt install -y nano
 RUN apt install -y htop

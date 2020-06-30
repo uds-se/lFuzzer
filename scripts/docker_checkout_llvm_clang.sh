@@ -20,12 +20,11 @@ need_cmd() {
 }
 
 need_cmd mkdir
-need_cmd svn
 
 LLVM_VER=401
 LLVM_URL=https://llvm.org/svn/llvm-project
 
-TOOLCHAIN_DIR=./toolchains
+TOOLCHAIN_DIR=/home/toolchains
 TOOLCHAIN_BLD=${TOOLCHAIN_DIR}/build
 TOOLCHAIN_NAME=llvm+clang-${LLVM_VER}
 
@@ -34,19 +33,31 @@ BLD_DIR=${TOOLCHAIN_BLD}/${TOOLCHAIN_NAME}_build
 INSTALL_DIR=${TOOLCHAIN_DIR}/${TOOLCHAIN_NAME}
 
 # get sources
-mkdir -p "${SRC_DIR}"
-svn co "${LLVM_URL}/llvm/tags/RELEASE_${LLVM_VER}/final/" "${SRC_DIR}"
+mkdir -p "${TOOLCHAIN_BLD}"
+cd "${TOOLCHAIN_BLD}"
+wget https://releases.llvm.org/4.0.1/llvm-4.0.1.src.tar.xz
+tar xf llvm-4.0.1.src.tar.xz
+rm llvm-4.0.1.src.tar.xz
+mv "llvm-4.0.1.src" "${TOOLCHAIN_NAME}"
 
-while [ "$?" != 0 ]; do
-  echo "restart svn co"
-  svn cleanup "${SRC_DIR}" > /dev/null 2>&1
-  svn co "${LLVM_URL}/llvm/tags/RELEASE_${LLVM_VER}/final/" "${SRC_DIR}"
-done
+cd "${TOOLCHAIN_NAME}/tools/"
+wget https://releases.llvm.org/4.0.1/cfe-4.0.1.src.tar.xz
+tar xf cfe-4.0.1.src.tar.xz
+rm cfe-4.0.1.src.tar.xz
+mv cfe-4.0.1.src clang
 
-svn co "${LLVM_URL}/cfe/tags/RELEASE_${LLVM_VER}/final/"  "${SRC_DIR}/tools/clang"
+exit 0
 
-while [ "$?" != 0 ]; do
-  echo "restart svn co"
-  svn cleanup "${SRC_DIR}/tools/clang" > /dev/null 2>&1
-  svn co "${LLVM_URL}/cfe/tags/RELEASE_${LLVM_VER}/final/"  "${SRC_DIR}/tools/clang"
-done
+#while [ "$?" != 0 ]; do
+#  echo "restart svn co"
+#  svn cleanup "${SRC_DIR}" > /dev/null 2>&1
+#  svn co "${LLVM_URL}/llvm/tags/RELEASE_${LLVM_VER}/final/" "${SRC_DIR}"
+#done
+#
+#svn co "${LLVM_URL}/cfe/tags/RELEASE_${LLVM_VER}/final/"  "${SRC_DIR}/tools/clang"
+#
+#while [ "$?" != 0 ]; do
+#  echo "restart svn co"
+#  svn cleanup "${SRC_DIR}/tools/clang" > /dev/null 2>&1
+#  svn co "${LLVM_URL}/cfe/tags/RELEASE_${LLVM_VER}/final/"  "${SRC_DIR}/tools/clang"
+#done

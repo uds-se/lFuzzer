@@ -9,12 +9,14 @@ RUN apt install -y gcc
 RUN apt install -y ninja-build
 RUN apt install -y cmake
 RUN apt install -y python3
+RUN apt install -y wget
 
 
 RUN mkdir -p /home/scripts
+COPY scripts/docker_checkout_llvm_clang.sh /home/scripts/docker_checkout_llvm_clang.sh
 COPY scripts/docker_install_llvm_clang.sh /home/scripts/docker_install_llvm_clang.sh
-COPY scripts/toolchains /home/toolchains
 
 WORKDIR /home/scripts/
 
+RUN ./docker_checkout_llvm_clang.sh
 RUN ./docker_install_llvm_clang.sh

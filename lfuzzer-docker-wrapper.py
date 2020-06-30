@@ -40,13 +40,6 @@ def build():
     """
     proc = subprocess.run(["docker", "image", "inspect", llvm_image], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if proc.returncode != 0:
-        # get the llvm sources
-        os.chdir("./scripts/")
-        proc = subprocess.run(["sh", "docker_checkout_llvm_clang.sh"])
-        os.chdir("..")
-        if proc.returncode != 0:
-            print_fail("Downloading LLVM via SVN did not finish correctly. Check command line for further information.")
-            exit(1)
         # build llvm image
         proc = subprocess.run(["docker", "build", "-t", llvm_image, "-f", llvm_dockerfile, "."])
 

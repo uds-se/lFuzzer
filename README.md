@@ -16,7 +16,7 @@ Choose a machine to conduct the experiments on. lFuzzer should run properly on a
 Connecting to the Container
 ---------------------------
 
-1.  Install `Docker`, `Subversion`, and `Python 3` on your host machine (tested with Python 3.7.7)
+1.  Install `Docker` and `Python 3` on your host machine (tested with Python 3.7.7)
 2.  Clone this repository to the machine at which you want to conduct the experiments on.
 3.  Start docker.
 4.  Install the image by typing: `./lfuzzer-docker-wrapper.py -b` (the first installation takes some time since we first need to download and compile LLVM in a docker image and then install all tools in the lFuzzer image which is based on the LLVM image). Please assign at least 3 GB of RAM to docker, otherwise the compilation of LLVM might run out of memory.

@@ -105,3 +105,5 @@ cd "${BLD_DIR}" && cmake -G "Ninja"                              \
 # CMAKE_CXX_FLAGS:-pthread
 cmake --build "${BLD_DIR}"                  || die "unable to build llvm/clang"
 cmake --build "${BLD_DIR}" --target install || die "unable to install llvm/clang"
+
+rm -rf "${TOOLCHAIN_BLD}"
