@@ -4,7 +4,7 @@ lFuzzer
 General Information
 -------------------
 
-This package contains lFuzzer, presented in the paper [Learning Input Tokens for Effective Fuzzing](https://publications.cispa.saarland/3098/). We published the experiment results as well as the original experiment setup in the ACM library alongside with the paper (link TBA). This repository only contains lFuzzer itself.
+This package contains lFuzzer, presented in the paper [Learning Input Tokens for Effective Fuzzing](https://publications.cispa.saarland/3135/). We published the experiment results as well as the original experiment setup in the ACM library alongside with the paper (link TBA). This repository only contains lFuzzer itself.
 
 In case of any questions, feel free to contact: bjoern.mathis (at) cispa.saarland.
 
