@@ -42,10 +42,13 @@ def run_and_trace(parentdir, inpt: str, as_arg: bool, trace: bool = True) -> Tup
             exit_code = 0
     else:
         try:
+            # we use encoding latin-1 and sanitize the string with the bytes/decode function for latin-1 (i.e. remove chararacters are
+            # out of the range we are testing)
+            encoding = 'latin-1'
             if Utils.g_flag:
-                proc = subprocess.run([run_subject] + Utils.g_flag.split(" "), timeout=10, input=inpt, encoding='ascii', stdout=subprocess.PIPE)
+                proc = subprocess.run([run_subject] + Utils.g_flag.split(" "), timeout=10, input=inpt.encode(encoding=encoding, errors="ignore"), stdout=subprocess.PIPE)
             else:
-                proc = subprocess.run([run_subject], timeout=10, input=inpt, encoding='ascii', stdout=subprocess.PIPE)
+                proc = subprocess.run([run_subject], timeout=10, input=inpt.encode(encoding=encoding, errors="ignore"), stdout=subprocess.PIPE)
             exit_code = proc.returncode
         except subprocess.TimeoutExpired:
             print("Timed out.")
